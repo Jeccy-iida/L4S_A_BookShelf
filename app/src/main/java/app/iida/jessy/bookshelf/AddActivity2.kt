@@ -5,13 +5,35 @@ import android.os.Bundle
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.snackbar.Snackbar
+import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_add2.*
 
 
 class AddActivity2 : AppCompatActivity() {
+
+    val realm: Realm = Realm.getDefaultInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add2)
 
+        val memo: Memo? = read()
+
+        if (memo != null){
+            titleEditText.setText(memo.title)
+            nameEditText.setText(memo.name)
+            moneyEditText.setText(memo.money)
+            descriptionEditText.setText(memo.description)
+        }
+        //追加ボタンを押した時に入力されたテキストを取得しsave()メソッドに値を渡す
+        addButton.setOnClickListener{
+            val title: String = titleEditText.text.toString()
+            val name: String = nameEditText.text.toString()
+            val money: String = moneyEditText.text.toString()
+            val descriptor: String = descriptionEditText.text.toString()
+            save(title,name,money,descriptor)
+        }
         // activity_toolbar_sample.xml からToolbar要素を取得
         val toolbar2 = findViewById<Toolbar>(R.id.toolBar2)
         // アクションバーにツールバーをセット
@@ -29,4 +51,41 @@ class AddActivity2 : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
+    }
+
+    //起動したときにデータが表示される
+    fun read(): Memo?{
+        return realm.where(Memo::class.java).findFirst()
+    }
+
+    //受け取った情報の保存
+    fun save(title:String,name:String,money:String,description:String){
+        val memo: Memo?=read()
+
+        realm.executeTransaction {
+            if (memo != null) {
+                //メモの更新
+                memo.title = title
+                memo.name = name
+                memo.money = money
+                memo.description = description
+            } else {
+                //メモの新規作成
+                val newMemo: Memo = it.createObject(Memo::class.java)
+                newMemo.title = title
+                newMemo.name = name
+                newMemo.money = money
+                newMemo.description = description
+            }
+
+            Snackbar.make(container,"保存しました!!",Snackbar.LENGTH_SHORT).show()
+        }
+
+    }
+
+
 }
