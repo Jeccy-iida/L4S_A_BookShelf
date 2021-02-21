@@ -4,6 +4,7 @@ import android.app.Application
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
+
 class RealmMemoApplication : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -14,4 +15,6 @@ class RealmMemoApplication : Application() {
             .build()
         Realm.setDefaultConfiguration(realmConfig)
     }
+
+
 }

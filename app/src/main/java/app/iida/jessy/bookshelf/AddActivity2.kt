@@ -3,29 +3,36 @@ package app.iida.jessy.bookshelf
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add2.*
+//import java.util.*
 
 
 class AddActivity2 : AppCompatActivity() {
 
+    //realmが使えるように設定
     val realm: Realm = Realm.getDefaultInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add2)
 
-        val memo: Memo? = read()
+        //戻るのボタン設定
 
-        if (memo != null){
-            titleEditText.setText(memo.title)
-            nameEditText.setText(memo.name)
-            moneyEditText.setText(memo.money)
-            descriptionEditText.setText(memo.description)
-        }
+        //Memoの読み込み
+        val memo: Book? = read()
+
+
+//        if (memo != null){
+//            titleEditText.setText(memo.title)
+//            nameEditText.setText(memo.name)
+//            moneyEditText.setText(memo.money)
+//            descriptionEditText.setText(memo.description)
+//        }
+
+
         //追加ボタンを押した時に入力されたテキストを取得しsave()メソッドに値を渡す
         addButton.setOnClickListener{
             val title: String = titleEditText.text.toString()
@@ -41,6 +48,7 @@ class AddActivity2 : AppCompatActivity() {
         // ツールバーに戻るボタンを設置
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+
     // ツールバーのアイテムを押した時の処理を記述（今回は戻るボタンのみのため、戻るボタンを押した時の処理しか記述していない）
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // android.R.id.home に戻るボタンを押した時のidが取得できる
@@ -52,35 +60,36 @@ class AddActivity2 : AppCompatActivity() {
 
     }
 
+    //realm関係
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
     }
 
     //起動したときにデータが表示される
-    fun read(): Memo?{
-        return realm.where(Memo::class.java).findFirst()
+    fun read(): Book?{
+        return realm.where(Book::class.java).findFirst()
     }
 
     //受け取った情報の保存
-    fun save(title:String,name:String,money:String,description:String){
-        val memo: Memo?=read()
+            fun save(title:String,name:String,money:String,description:String){
+                val book: Book?=read()
 
-        realm.executeTransaction {
-            if (memo != null) {
-                //メモの更新
-                memo.title = title
-                memo.name = name
-                memo.money = money
-                memo.description = description
-            } else {
-                //メモの新規作成
-                val newMemo: Memo = it.createObject(Memo::class.java)
-                newMemo.title = title
-                newMemo.name = name
-                newMemo.money = money
-                newMemo.description = description
-            }
+                realm.executeTransaction {
+                    if (book != null) {
+                        //メモの更新
+                        book.title = title
+                        book.name = name
+                        book.money = money
+                        book.description = description
+                    } else {
+                        //メモの新規作成
+                        val newBook: Book = it.createObject(Book::class.java)
+                        newBook.title = title
+                        newBook.name = name
+                        newBook.money = money
+                        newBook.description = description
+                    }
 
             Snackbar.make(container,"保存しました!!",Snackbar.LENGTH_SHORT).show()
         }
