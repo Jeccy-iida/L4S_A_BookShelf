@@ -7,6 +7,9 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add2.*
+import java.util.*
+import java.util.UUID as UUID1
+
 //import java.util.*
 
 
@@ -21,8 +24,6 @@ class AddActivity2 : AppCompatActivity() {
 
         //戻るのボタン設定
 
-        //Memoの読み込み
-        val memo: Book? = read()
 
 
 //        if (memo != null){
@@ -34,12 +35,12 @@ class AddActivity2 : AppCompatActivity() {
 
 
         //追加ボタンを押した時に入力されたテキストを取得しsave()メソッドに値を渡す
-        addButton.setOnClickListener{
+        addButton.setOnClickListener {
             val title: String = titleEditText.text.toString()
             val name: String = nameEditText.text.toString()
             val money: String = moneyEditText.text.toString()
             val descriptor: String = descriptionEditText.text.toString()
-            save(title,name,money,descriptor)
+            save(title, name, money, descriptor)
         }
         // activity_toolbar_sample.xml からToolbar要素を取得
         val toolbar2 = findViewById<Toolbar>(R.id.toolBar2)
@@ -66,35 +67,21 @@ class AddActivity2 : AppCompatActivity() {
         realm.close()
     }
 
-    //起動したときにデータが表示される
-    fun read(): Book?{
-        return realm.where(Book::class.java).findFirst()
-    }
-
     //受け取った情報の保存
-            fun save(title:String,name:String,money:String,description:String){
-                val book: Book?=read()
+    fun save(title: String, name: String, money: String, description: String) {
 
-                realm.executeTransaction {
-                    if (book != null) {
-                        //メモの更新
-                        book.title = title
-                        book.name = name
-                        book.money = money
-                        book.description = description
-                    } else {
-                        //メモの新規作成
-                        val newBook: Book = it.createObject(Book::class.java)
-                        newBook.title = title
-                        newBook.name = name
-                        newBook.money = money
-                        newBook.description = description
-                    }
+        realm.executeTransaction {
+            //メモの新規作成
+            val newBook: Book = it.createObject(Book::class.java, java.util.UUID.randomUUID().toString())
+            newBook.title = title
+            newBook.name = name
+            newBook.money = money
+            newBook.description = description
 
-            Snackbar.make(container,"保存しました!!",Snackbar.LENGTH_SHORT).show()
         }
-
+        Snackbar.make(container, "保存しました!!", Snackbar.LENGTH_SHORT).show()
     }
+
 
 
 }
