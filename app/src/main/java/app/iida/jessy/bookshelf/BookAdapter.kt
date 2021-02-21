@@ -36,7 +36,7 @@ class BookAdapter(
         holder.nameTextView.text = book.name
         holder.dateTextView.text =
          //○分前表示にしたい
-                SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(book.time)
+                SimpleDateFormat("mm"+"分前", Locale.JAPANESE).format(book.time)
 
     }
 

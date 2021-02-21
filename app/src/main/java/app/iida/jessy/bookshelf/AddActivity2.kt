@@ -22,7 +22,7 @@ class AddActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add2)
 
-        //戻るのボタン設定
+
 
 
 
@@ -42,6 +42,9 @@ class AddActivity2 : AppCompatActivity() {
             val descriptor: String = descriptionEditText.text.toString()
             save(title, name, money, descriptor)
         }
+
+        //戻るのボタン設定
+
         // activity_toolbar_sample.xml からToolbar要素を取得
         val toolbar2 = findViewById<Toolbar>(R.id.toolBar2)
         // アクションバーにツールバーをセット

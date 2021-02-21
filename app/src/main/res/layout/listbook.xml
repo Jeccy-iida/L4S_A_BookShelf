@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:id="@+id/date"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="160dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,12 +19,14 @@
             android:id="@+id/bookImage"
             android:layout_width="match_parent"
             android:layout_height="120dp"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_baseline_book_24" />
 
         <TextView
             android:id="@+id/bookTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:text="TextView"
             android:textIsSelectable="false"
             android:textStyle="bold" />
@@ -38,6 +40,7 @@
                 android:id="@+id/nameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:text="TextView" />
 
